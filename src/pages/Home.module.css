@@ -1,0 +1,142 @@
+.image{
+    position: relative;
+    left: 30%;
+}
+
+.phonenotvalid{
+    color: red;
+    position: fixed;
+    top: 418px;
+    left: 1000px;
+    font-weight: bold;
+    
+    
+}
+.emailnotValid{
+color: red;
+position: fixed;
+top: 486px;
+left: 1000px;
+font-weight: bold;
+
+
+}
+
+.CompanyName{
+    position: relative;
+    left: 760px;
+    top: -240px;
+    font-size: xx-large;
+    font-weight: bolder;
+    color: darkblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.Address{
+    font-size: medium;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: left;
+    position: relative;
+    left: 760px;
+    top: -265px;
+    line-height: 22px;
+}
+.Heading{
+    font-size: x-large;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    position:relative;
+    left: 760px;
+    top: -275px;
+    font-style: italic;
+}
+.contents{
+    font-style: normal;
+    background-color: white;
+    position:relative;
+    top: -302px;
+    left: 35%;
+    width: 31vw;
+    line-height: 70px;
+   font-size: large;
+    
+}
+.MobileNumber{
+     outline: 0;
+}
+.MobileNumber:valid{
+    border-color: green;
+}
+.MobileNumber:focus:invalid{
+    border-color: red;
+}
+.EmailID{
+    outline: 0;
+}
+.EmailID:valid{
+   border-color: green;
+}
+.EmailID:focus:invalid{
+   border-color: red;
+}
+
+.input{
+    width: 10%;
+    padding: 5px 8px;
+    box-sizing: border-box;
+
+}
+.Submit{
+    position: relative;
+    left: -345px;
+    top: 100px;
+    box-sizing: border-box;
+    background-color: white;
+    padding: 10px 5px;
+    margin: 18px;
+    width: 105px;     
+    font-weight: 800;
+}
+.cancel{
+    position: relative;
+    left: 40px;
+    top: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    padding: 10px 5px;
+    margin: 18px;
+    width: 105px;     
+}
+.delete{
+    position: relative;
+    left: 60px;
+    top: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    padding: 10px 5px;
+    margin: 18px;
+    width: 105px;     
+
+}
+.UserID{
+    width: 10%;
+    padding: 5px 8px;
+    box-sizing: border-box;
+
+}
+.Reset{
+    position: relative;
+    left: 70px;
+    top: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    padding: 10px 5px;
+    margin: 18px;
+    width: 105px;  
+}
+.EmailIDnotvalid{
+    Color: red;
+    position: fixed;
+    top: 487px;
+    left: 1000px;
+    font-weight: bold;
+}
