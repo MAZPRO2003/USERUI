@@ -1,28 +1,44 @@
 import project4 from "./Home.module.css";
 import React, { useEffect, useState } from "react"
-import axios from "axios"
-import { useNavigate, Link } from "react-router-dom"
+import axios, { isAxiosError } from "axios"
+import {useNavigate, Link, Navigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { trusted } from "mongoose";
+import {Input,Card} from "antd";
+import App from "../App" 
 
- function Home() {
-  
 
+
+ 
   
-  const [UserID,setUserID] = useState('')
+  const Home = (props) => {
+    useEffect(()=>{
+      console.log(props.data)
+      setdata(props.data);
+   },[props.data])
+    const [data,setdata] = useState(false);
+  const history=useNavigate();
+
   const [Name,setName] = useState('')
   const [MobileNumber,setMobileNumber] = useState('')
   const [EmailID,setEmailID] = useState('')
   const [UserType,setUserType] = useState('')
+  const [Password,setPassword] = useState('')
   const [isValidPhone,setIsValidPhone] = useState(true);
   const [isTouchedPhone,setIsTouchedPhone] = useState(false);
   const [isValidEmailID,setIsValidEmailID] = useState(true);
   const [isTouchedEmailID,setIsTouchedEmailID] = useState(false);
- 
+  const [collection,setCollection] = useState([])
+  
+     
+
   useEffect(() => {
     if(MobileNumber.length !==10) setIsValidPhone(false); // useEffect will occur when there is a change in MobileNumber
-    else setIsValidPhone(true);
+    else {
+      setIsValidPhone(true);
+
+    }
   },[MobileNumber]);
   
 
@@ -31,10 +47,16 @@ import { trusted } from "mongoose";
     else setIsValidEmailID(true);
   } , [EmailID])
 
+  
 
-  const Reset = () => {
+
+
+  const Reset=() => {
   return window.location.reload()
   }
+  
+  
+  
   
   
   async function Submit(e){
@@ -42,7 +64,7 @@ import { trusted } from "mongoose";
 
     try{
       await axios.post("http://localhost:8000/",{
-        UserID,Name,MobileNumber,EmailID,UserType
+        MobileNumber,Name,Password,EmailID,UserType
       })
       .then(res=>{
         if(res.data=="exist"){
@@ -56,6 +78,7 @@ import { trusted } from "mongoose";
             progress: undefined,
             theme: "light",
             });
+        
             
             
         }
@@ -70,6 +93,9 @@ import { trusted } from "mongoose";
             progress: undefined,
             theme: "light",
             });
+            return history("/FetchData")
+            
+           
            
         }
     })
@@ -83,11 +109,24 @@ catch(e){
 }
 
 }
+const handleDelete = async (mobileNumber) => {
+  try {
+    const filteredCollection = collection.filter((p) => p.MobileNumber !== mobileNumber);
+    setCollection(filteredCollection);
+    await axios.delete(`http://localhost:8000/${mobileNumber}`);
+    // Perform any additional actions after successful deletion if needed
+  } catch (error) {
+    console.log(error);
+    // Handle errors appropriately
+  }
+};
 
-    
-  
-  return (
+
    
+    
+return(
+    
+    <div>
     <React.Fragment>
     <div className={project4.image}><img src="assets/Logo.png" alt="Kasi Pandian Group" loading="lazy"/></div>
         
@@ -104,15 +143,14 @@ catch(e){
     
         <form action="POST">
             <ul className={project4.contents}>
-                <label for="">User ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input className="UserID" type="text" onChange={(e) => { setUserID(e.target.value) }} placeholder="UserID"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <label for="">Mobile Number&nbsp;</label>
+                <input className={project4.MobileNumber} type="" maxLength="10" required pattern="[0-9]{10}" onChange={(e) => { setIsTouchedPhone(true);setMobileNumber(e.target.value) }} placeholder="MobileNumber"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                {(isTouchedPhone && !isValidPhone) ?  <div className={project4.phonenotvalid}>Mobile Number is Not Valid</div> : null}
                 <label for="">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <input className="Name" type="text" onChange={(e) => { setName(e.target.value) }} placeholder="Name" /><br/>
-                <label for="">Mobile Number&nbsp;</label>
-                <input className={project4.MobileNumber} type="" maxLength="10" required pattern="[0-9]{10}" onChange={(e) => { setIsTouchedPhone(true);setMobileNumber(e.target.value) }} placeholder="MobileNumber (10 Digits)" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
-                {(isTouchedPhone && !isValidPhone) ?  <div className={project4.phonenotvalid}>Mobile Number is Not Valid</div> : null}
-               
-                
+
+                <label for="">Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input className={project4.Password} type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
                 <label for="">Email ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                 <input className={project4.EmailID} type="text" placeholder="EmailID" onChange={(e) => {setIsTouchedEmailID(true);setEmailID(e.target.value)}}/><br/>
                 {(!isValidEmailID && isTouchedEmailID) ? <div className={project4.EmailIDnotvalid}>Email ID is Not Valid</div> : null}
@@ -124,10 +162,18 @@ catch(e){
                     <option value="Sales Executive">Sales Executive</option>
                 </select>
                
-                <input  className={project4.Submit} type="submit" onClick={Submit}               
+                <input  className={project4.Submit} type="submit"             
                  disabled = {!(isValidPhone && isTouchedPhone && isValidEmailID && isTouchedEmailID)}/>
                  <ToastContainer/>
-                <button className={project4.delete}>Delete</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 
+                 <button
+    className={project4.Delete}
+    type="delete"
+    onClick={Submit} // Pass the MobileNumber as a parameter
+  >
+    Delete
+  </button>
+            
                 <button className={project4.cancel} onClick={Reset}>Cancel</button> 
             
             </ul>
@@ -137,11 +183,13 @@ catch(e){
        </div>   
     
     </React.Fragment>
-
-   
-  )
+    </div>
+   )
   }
-  
 
+
+  
+ 
+ 
 
 export default Home;
